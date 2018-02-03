@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+
+	<style type="text/css">
+
+		* {
+			box-sizing: border-box;	
+		}
+
+		body > div, body > form, body > table, body > textarea {
+		    width: 80%;
+		    display: table;
+		    margin: 0 auto;
+		    margin-bottom: 20px;
+		}
+
+		html {
+		    font-size: 16px;
+		    color: #333;
+		    font-family: sans-serif;
+		}
+
+		form > div {
+		    margin: 20px 0;
+		}
+
+		form > div > label {
+		    font-weight: bold;
+		    display: block;
+		}
+
+		form input[type="text"], form input[type="number"] {
+		    padding: 5px;
+		    width: 100%;
+		    margin: 5px 0;
+		}
+
+		form > div > div > label:first-of-type {
+		    margin-top: 20px;
+		    /* display: block; */
+		}
+
+		textarea {
+			height: 100px;
+		}
+
+		table {
+		    border-spacing: 0;
+		}
+
+		table td, table th {
+		    border: 1px solid #f0f0f0;
+		    padding: 5px;
+		    text-align: left;
+		}
+
+	</style>
+</head>
+<body>
+	<div>
+		<h1>Serialize form for json object</h1>
+	</div>
+	<form id="formPerson">
+		<div>
+			<label>First Name</label>
+			<input name="firstName" type="text" value="Rias" />
+		</div>
+		<div>
+			<label>Last Name</label>
+			<input name="lastName" type="text" value="Gremory" />
+		</div>
+		<div>
+			<label>Country</label>
+			<input name="adress.country" type="text" value="Brazil" />
+		</div>
+		<div>
+			<label>Genre</label>
+			<div>
+			<label><input name="genre" type="radio" value="m" /> Male</label><label><input name="genre" type="radio" value="f" checked /> Famele</label>
+			</div>
+		</div>
+		<div>
+			<label>Family members</label>
+			<hr/>
+			<div>
+				<label>Name</label>
+				<input name="family[0].name" type="text" value="Ashia" />
+				<label>Age</label>
+				<input type="number" value="16" name="family[0].age" />
+				<label>Gerne</label>
+				<div>
+				<label><input name="family[0].genre" type="radio" value="m" /> Male</label><label><input name="family[0].genre" type="radio" value="f" checked /> Famele</label>
+				</div>
+			</div>
+
+			<div>
+				<label>Name</label>
+				<input name="family[1].name" type="text" value="Xenovia" />
+				<label>Age</label>
+				<input type="number" value="22" name="family[1].age" />
+				<label>Gerne</label>
+				<div>
+				<label><input name="family[1].genre" type="radio" value="m" /> Male</label><label><input name="family[1].genre" type="radio" value="f" checked /> Famele</label>
+				</div>
+			</div>
+
+			<div>
+				<label>Name</label>
+				<input name="family[2].name" type="text" value="Gaspa" />
+				<label>Age</label>
+				<input type="number" value="15" name="family[2].age" />
+				<label>Gerne</label>
+				<div>
+				<label><input name="family[2].genre" type="radio" value="m" /> Male</label><label><input name="family[2].genre" type="radio" value="f" checked /> Famele</label>
+				</div>
+			</div>
+		</div>
+	
+		</div>
+		<div>
+			<input type="submit" value="Submit" />
+		</div>
+	</form>
+	<textarea id="formDataJson"></textarea>
+	<div>
+		<input type="button" value="Run tests" onclick="runPropTest()" />
+	</div>
+	<table>
+		<thead>
+			<tr>
+				<th>Property Name</th>
+				<th>Json result</th>
+				<th>Passed?</th>
+			</tr>
+		</thead>
+		<tbody id="testResultContent"></tbody>
+	</table>
+
+
+	<script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="formToJson.js"></script>
+	<script type="text/javascript">
+		
+		$('#formPerson').submit(function(){
+
+			var formJsonp = $(this).serializeJson();
+
+			$('#formDataJson').val(JSON.stringify(formJsonp));
+
+			return false;
+		});
+
+		function runPropTest() {
+
+			var $testResult = $('#testResultContent');
+			$testResult.empty();
+
+			var propList = [{ 
+				prop: 'prop', 
+				json: '{"prop":"value"}'
+			}, { 
+				prop:'prop[0]', 
+				json: '{"prop":["value"]}'
+			}, { 
+				prop: 'prop.inner',
+				json: '{"prop":{"inner":"value"}}'
+			}, {
+				prop: 'prop[0].inner',
+				json: '{"prop":[{"inner":"value"}]}'
+			}, {
+				prop: 'prop[0][0]',
+				json: '{"prop":[["value"]]}'
+			}, {
+				prop: 'prop[0][0].inner',
+				json: '{"prop":[[{"inner":"value"}]]}'
+			}, {
+				prop: 'prop.inner[0].inner2[0]',
+				json: '{"prop":{"inner":[{"inner2":["value"]}]}}' 
+			}];
+
+			for (var i = 0; i < propList.length; i++) {
+
+				var result = parseFormToJson([{ name: propList[i].prop, value: 'value' }]);
+				var rjson = JSON.stringify(result);
+				$testResult.append('<tr><td>' + propList[i].prop + '</td><td>' + rjson + '</td><td>' + (rjson === propList[i].json ? 'yes' : 'no') + '</td></tr>');
+			}			
+		}
+
+	</script>
+</body>
+</html>
