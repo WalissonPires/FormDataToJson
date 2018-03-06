@@ -58,6 +58,7 @@ https://github.com/WalissonPires/FormDataToJson
 
 	    var result = {};
 		var rootArrayMap = {};
+		options = options || {};
 		options.formatterValue = options.formatterValue || function(value, property) {
 
 			return value;
