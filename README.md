@@ -4,12 +4,18 @@
 ```javascript
   $('#formPerson').submit(function(){
 
-			var formDataJson = $(this).serializeJson();  //plugin function
+		var options = {
+        	formatterValue: function(value) {
+            	return value.toUpperCase();
+            }
+        };
 
-			//send ajax request
+        var formDataJson = $(this).serializeJson(options);  //plugin function
 
-			return false;
-		});
+        //send ajax request
+
+        return false;
+  });
 ```
 
 ### Dependencies
@@ -21,14 +27,34 @@
 ```javascript
 /***
 * JQuery function that captures form data and convert to json object
+* @param {SerializeOptions} [options] 
 */
- $("#myForm").serializeJson()
+ $("#myForm").serializeJson(options)
 ```
 
 ```javascript
 /***
 * Global function that accepts form data as parameter and converts them to json object
-* @param formArray - [{ name: string, value: string }]
+* @param {object} formArray 
+* @param {string} formArray[].name
+* @param {string} formArray[].value
+* @param {SerializeOptions} [options] 
 */
- window.parseFormToJson(formArray)
+ window.parseFormToJson(formArray, options)
+```
+
+```javascript
+/***
+* Type Definitions
+* 
+* @typedef SerializeOptions
+* @property {formatterValueCallback} formatterValue
+*
+* @callback formatterValueCallback
+* @param {string} value
+* @param {string} field
+* @return {string}
+*/
+
+
 ```

@@ -145,7 +145,12 @@
 		
 		$('#formPerson').submit(function(){
 
-			var formJsonp = $(this).serializeJson();
+			var formJsonp = $(this).serializeJson({
+				formatterValue: function(value) {
+
+					return '***' + value;
+				}
+			});
 
 			$('#formDataJson').val(JSON.stringify(formJsonp));
 

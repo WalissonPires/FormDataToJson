@@ -1,3 +1,7 @@
+/*
+https://github.com/WalissonPires/FormDataToJson
+*/
+
 (function(){
 
 	function parseName(name) {
@@ -50,10 +54,14 @@
 		return parts;
 	}
 
-	function parseFormToJson(formArray) {
+	function parseFormToJson(formArray, options) {
 
 	    var result = {};
 		var rootArrayMap = {};
+		options.formatterValue = options.formatterValue || function(value, property) {
+
+			return value;
+		};
 
 	    for (var i = 0; i < formArray.length; i++) {
 
@@ -76,14 +84,14 @@
 
 	                	if (dataIndex === null) { //is primitive value
 					   
-					   		root[prop] = data.value;
+					   		root[prop] = options.formatterValue(data.value, prop);
 
 						} else {
 				
 							if (root[dataIndex] === undefined) 
 								root[dataIndex] = {};
 
-							root[dataIndex][prop] = data.value;
+							root[dataIndex][prop] = options.formatterValue(data.value, prop);
 							dataIndex = null;
 	                    }
 						
@@ -104,7 +112,7 @@
 	            } else { //is index array
 
 	                if (j+1 >= dataNames.length) 
-	                    root.push(data.value);
+	                    root.push(options.formatterValue(data.value, j > 0 ? dataNames[j-1] : ''));
 	                else {
 
 
@@ -150,12 +158,12 @@
 	//jQuery extension
 	if (window.jQuery !== undefined && jQuery.fn !== undefined) {
 		
-		jQuery.fn.serializeJson = function() {
+		jQuery.fn.serializeJson = function(options) {
 
 			if (!this.is('form'))
 				throw 'A form element was expected';
 
-			return parseFormToJson(this.serializeArray());
+			return parseFormToJson(this.serializeArray(), options);
 		};
 	}
 
