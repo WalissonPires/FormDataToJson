@@ -4,9 +4,9 @@
 ```javascript
   $('#formPerson').submit(function(){
 
-		var options = {
-        	formatterValue: function(value) {
-            	return value.toUpperCase();
+        var options = {
+            formatterValue: function(value) {
+              return value.toUpperCase();
             }
         };
 
@@ -27,7 +27,7 @@
 ```javascript
 /***
 * JQuery function that captures form data and convert to json object
-* @param {SerializeOptions} [options] 
+* @param {SerializeOptions} options 
 */
  $("#myForm").serializeJson(options)
 ```
@@ -38,7 +38,7 @@
 * @param {object} formArray 
 * @param {string} formArray[].name
 * @param {string} formArray[].value
-* @param {SerializeOptions} [options] 
+* @param {SerializeOptions} options 
 */
  window.parseFormToJson(formArray, options)
 ```
