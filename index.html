@@ -148,7 +148,7 @@
 			var formJsonp = $(this).serializeJson({
 				formatterValue: function(value) {
 
-					return '***' + value;
+					return 'CustomPrefix_' + value;
 				}
 			});
 
