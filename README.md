@@ -17,7 +17,9 @@
         return false;
   });
 ```
-
+ [View Sample!](http://google.com)
+ 
+ 
 ### Dependencies
 
 - jQuery >= 1.2
