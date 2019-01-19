@@ -5,7 +5,7 @@
   $('#formPerson').submit(function(){
 
         var options = {
-            formatterValue: function(value) {
+            formatterValue: function(value, inputName) {
               return value.toUpperCase();
             }
         };
